@@ -1,0 +1,50 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "water.tsx",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "grass.tmx": {
+            "scale": 8,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 507.0625,
+                "y": 193.4375
+            }
+        },
+        "grass.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 11
+        },
+        "water.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 11
+        }
+    },
+    "frame.defaultDuration": 250,
+    "last.imagePath": "C:/Users/Owner/Nathans_repositrys/Python_2D_Sandbox/Python-2D-Sandbox/Assets/Images/Tiles",
+    "map.fixedSize": false,
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "openFiles": [
+        "grass.tmx",
+        "grass.tsx",
+        "water.tsx"
+    ],
+    "project": "untitled.tiled-project",
+    "recentFiles": [
+        "grass.tmx",
+        "grass.tsx",
+        "water.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}
