@@ -1,8 +1,9 @@
 import pygame
 import os
 
-WINDOW_SIZE = pygame.math.Vector2(16, 9) * 16
+TILE_SIZE = 16
 PLAYER_SIZE = pygame.math.Vector2(16, 24)
+WINDOW_SIZE = pygame.math.Vector2(16, 9) * 16
 
 def load_texture(filename, type):
 	texture = pygame.image.load(os.path.join('C:\\', *((__file__.split(':')[1]).split('\\')[:-1]), 'Assets', 'Images', type, f'{filename}.png'))
@@ -22,6 +23,8 @@ def load_character_animation(state):
 		animation_frames.append(textures.subsurface((i * PLAYER_SIZE.x, 0, PLAYER_SIZE.x, PLAYER_SIZE.y)))
 	return animation_frames
 
+sign = lambda x: int(x/abs(x)) if x != 0 else 0
+
 CHARACTER_TEXTURES: dict[str, list[pygame.Surface]] = {
 	f'{state.name}'.split('.')[0]: load_character_animation(state.name.split('.')[0]) for state in \
 		os.scandir(os.path.join('C:\\', *((__file__.split(':')[1]).split('\\')[:-1]), 'Assets', 'Images', 'Characters')) if state.name.split('.')[1] =='png'
@@ -31,3 +34,12 @@ TILE_TEXTURES: dict[str, list[pygame.Surface]] = {
 	'grass': load_tile_animation('grass'),
 	'water': load_tile_animation('water')
 }
+
+DIRECTIONS = {# dict[tuple[float, float], str] = {
+	(0.0, -1.0): 'b',
+    (0.0, 1.0): 'f',
+    (-1.0, 0.0): 'l',
+    (1.0, 0.0): 'r'
+}
+
+PLAYER_SPEED = 16
