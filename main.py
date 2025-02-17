@@ -13,10 +13,11 @@ class Player:
 
 		self.position = pygame.math.Vector2(0, 0)
 		self.direction = pygame.math.Vector2(0, 1)
-		self.velocity = 0
-		self.action = 'idle'
-
 		self.accelerate = False
+		self.velocity = 0
+
+		self.action = 'idle'
+		self.animation_direction = (0, 1)
 
 	def handle_events(self, delta_time):
 		self.accelerate = False
@@ -35,7 +36,7 @@ class Player:
 			self.direction.x = 1
 			self.accelerate = True
 
-	def update(self, delta_time, total_time):
+	def update_velocity(self, delta_time):
 		self.handle_events(delta_time)
 		self.velocity = min(self.velocity, PLAYER_SPEED)
 		if self.accelerate:
@@ -47,8 +48,15 @@ class Player:
 		temp = copy.copy(self.direction)
 		try: temp.scale_to_length(delta_time * self.velocity)
 		except ValueError: temp = pygame.math.Vector2(0, 0)
-		print(f'{self.action}_{self.velocity, self.direction, temp}')
 		self.position += temp
+
+	def update(self, delta_time, total_time):
+		self.update_velocity(delta_time)
+
+		self.animation_direction = temp if (temp := (0.0 if abs(self.direction.y) > abs(self.direction.x) * 1.05 else sign(self.direction.x), \
+											   		 0.0 if abs(self.direction.y) < abs(self.direction.x) * 1.05 else sign(self.direction.y))) != (0, 0) else self.animation_direction
+		self.texture = CHARACTER_TEXTURES[f"{self.action}_{DIRECTIONS[self.animation_direction]}"]
+		print(f'Action: {self.action} Velocity, Direction: {self.velocity, self.direction}')
 
 	def draw(self, total_time):
 		self.display.blit(self.texture[int(total_time * 4) % len(self.texture)], self.position + WINDOW_SIZE / 2)
