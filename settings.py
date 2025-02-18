@@ -1,5 +1,7 @@
 import pygame
 import os
+import math
+import time
 
 TILE_SIZE = 16
 PLAYER_SIZE = pygame.math.Vector2(16, 24)
@@ -35,7 +37,7 @@ TILE_TEXTURES: dict[str, list[pygame.Surface]] = {
 	'water': load_tile_animation('water')
 }
 
-DIRECTIONS = {# dict[tuple[float, float], str] = {
+DIRECTIONS: dict[tuple[float, float], str] = {
 	(0.0, -1.0): 'b',
     (0.0, 1.0): 'f',
     (-1.0, 0.0): 'l',
