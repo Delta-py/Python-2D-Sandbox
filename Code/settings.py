@@ -7,8 +7,10 @@ TILE_SIZE = 16
 PLAYER_SIZE = pygame.math.Vector2(16, 24)
 WINDOW_SIZE = pygame.math.Vector2(16, 9) * 16
 
+get_file_path = lambda *folders: os.path.join('C:\\', *((__file__.split(':')[1]).split('\\')[:-2]), *folders)
+
 def load_texture(filename, type):
-	texture = pygame.image.load(os.path.join('C:\\', *((__file__.split(':')[1]).split('\\')[:-1]), 'Assets', 'Images', type, f'{filename}.png'))
+	texture = pygame.image.load(get_file_path('Assets', 'Images', type, f'{filename}.png'))
 	return texture
 
 def load_tile_animation(tile):
@@ -29,7 +31,7 @@ sign = lambda x: int(x/abs(x)) if x != 0 else 0
 
 CHARACTER_TEXTURES: dict[str, list[pygame.Surface]] = {
 	f'{state.name}'.split('.')[0]: load_character_animation(state.name.split('.')[0]) for state in \
-		os.scandir(os.path.join('C:\\', *((__file__.split(':')[1]).split('\\')[:-1]), 'Assets', 'Images', 'Characters')) if state.name.split('.')[1] =='png'
+		os.scandir(os.path.join(get_file_path('Assets', 'Images', 'Characters'))) if state.name.split('.')[1] =='png'
 }
 
 TILE_TEXTURES: dict[str, list[pygame.Surface]] = {

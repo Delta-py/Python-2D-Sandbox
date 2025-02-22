@@ -24,14 +24,14 @@ class Game:
 					self.screen.blit(TILE_TEXTURES['grass'][int(total_time * 2) % len(TILE_TEXTURES['grass'])], (x, y))
 		pygame.draw.line(self.screen, (0, 0, 0), (0, WINDOW_SIZE.y / 2), (WINDOW_SIZE.x, WINDOW_SIZE.y / 2))
 		pygame.draw.line(self.screen, (0, 0, 0), (WINDOW_SIZE.x / 2, 0), (WINDOW_SIZE.x / 2, WINDOW_SIZE.y))
-		self.player.draw(total_time)
+		self.player.draw()
 		pygame.display.update()
 
 	def run(self):
 		running = True
 		while running:
 			self.clock.tick(pygame.display.get_current_refresh_rate())
-			delta_time = self.clock.get_time() / 1000
+			delta_time = (self.clock.get_time() / 1000)
 			total_time = time.time()
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
