@@ -31,7 +31,7 @@ sign = lambda x: int(x/abs(x)) if x != 0 else 0
 
 CHARACTER_TEXTURES: dict[str, list[pygame.Surface]] = {
 	f'{state.name}'.split('.')[0]: load_character_animation(state.name.split('.')[0]) for state in \
-		os.scandir(os.path.join(get_file_path('Assets', 'Images', 'Characters'))) if state.name.split('.')[1] =='png'
+		os.scandir(get_file_path('Assets', 'Images', 'Characters')) if state.name.split('.')[1] =='png'
 }
 
 TILE_TEXTURES: dict[str, list[pygame.Surface]] = {

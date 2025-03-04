@@ -1,24 +1,18 @@
 import importlib.util
-import importlib._bootstrap
-import importlib._bootstrap_external
+import sys
 import os
+print(__file__)
+BASE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(BASE_PATH)
+print(__file__)
+from B import b
+print(b.__name__, b.__package__)
 
-def importfile(path):
-	"""Import a Python source file or compiled file given its path."""
-	magic = importlib.util.MAGIC_NUMBER
-	with open(path, 'rb') as file:
-		is_bytecode = magic == file.read(len(magic))
-	filename = os.path.basename(path)
-	name, ext = os.path.splitext(filename)
-	if is_bytecode:
-		loader = importlib._bootstrap_external.SourcelessFileLoader(name, path)
-	else:
-		loader = importlib._bootstrap_external.SourceFileLoader(name, path)
-	# XXX We probably don't need to pass in the loader here.
-	spec = importlib.util.spec_from_file_location(name, path, loader=loader)
-	try:
-		return importlib._bootstrap._load(spec)
-	except Exception as err:
-		print(f"Error importing {filename}: {err}")
+def importfile(module_name, file_path):
+	spec = importlib.util.spec_from_file_location(module_name, file_path)
+	module = importlib.util.module_from_spec(spec)
+	sys.modules[module_name] = module
+	spec.loader.exec_module(module)
+	return module
 
-b = importfile(os.path.join('C:\\', *((__file__.split(':')[1]).split('\\')[:-2]), 'B', 'b.py'))
+b_ = importlib.import_module('B.b')

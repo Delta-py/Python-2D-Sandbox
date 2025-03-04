@@ -1,6 +1,7 @@
 import pygame
 from settings import *
 from player import Player
+from mod_loader import load_mods
 
 class Game:
 	def __init__(self):
@@ -13,9 +14,13 @@ class Game:
 		time.sleep(0.1)
 
 		self.player = Player()
+		self.mods = load_mods()
+
+		self.mods.on_init(self)
 
 	def update(self, delta_time, total_time):
 		self.player.update(delta_time, total_time)
+		self.mods.update(delta_time, total_time)
 
 	def draw(self, delta_time, total_time):
 		self.screen.fill((0, 0, 0))
@@ -25,6 +30,7 @@ class Game:
 		pygame.draw.line(self.screen, (0, 0, 0), (0, WINDOW_SIZE.y / 2), (WINDOW_SIZE.x, WINDOW_SIZE.y / 2))
 		pygame.draw.line(self.screen, (0, 0, 0), (WINDOW_SIZE.x / 2, 0), (WINDOW_SIZE.x / 2, WINDOW_SIZE.y))
 		self.player.draw()
+		self.mods.draw()
 		pygame.display.update()
 
 	def run(self):
@@ -36,6 +42,7 @@ class Game:
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
 					running = False
+				self.mods.handle_event(event)
 			self.update(delta_time, total_time)
 			self.draw(delta_time, total_time)
 		pygame.quit()

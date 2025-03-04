@@ -1,6 +1,5 @@
 from settings import *
 import keyboard_layout
-import pygame
 import copy
 
 class Player:
@@ -17,7 +16,7 @@ class Player:
 		self.action = 'idle'
 		self.animation_direction = (0, 1)
 
-	def handle_events(self, delta_time):
+	def handle_events(self):
 		self.accelerate = False
 		self.direction = pygame.math.Vector2(0, 0)
 		events = pygame.key.get_pressed()
@@ -35,7 +34,7 @@ class Player:
 			self.accelerate = True
 
 	def update_velocity(self, delta_time):
-		self.handle_events(delta_time)
+		self.handle_events()
 		self.velocity = min(self.velocity, PLAYER_SPEED)
 		if self.accelerate:
 			self.velocity += (1 * PLAYER_SPEED - self.velocity) / 0.05 * delta_time
