@@ -1,11 +1,12 @@
+from settings import *
 import settings
 import inspect
 import os
 import sys
-from settings import *
 import importlib.util
 import importlib._bootstrap
 import importlib._bootstrap_external
+import json
 
 BASE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_PATH)
@@ -62,15 +63,22 @@ class Mods(ModTemplate):
 		print('Mods drawing finished')
 
 def load_mods() -> Mods:
+	mod_data: dict[str, str] = {}
+	with open(get_file_path('Settings', 'mods_config.json'), 'r') as f:
+		data = json.load(f)
+		print(data)
+		print(data['mods'])
+		print(type(data['mods']))
+		for mod in data['mods'].keys():
+			mod_data[mod] = data['mods'][mod]
 	mods = []
 	mod_names = []
-	for file in os.scandir(get_file_path('Mods')):
-		if file.is_file() and file.name.split('.')[1] =='py':
-			mod_module = importfile(file.path)
-			for member_name, member in inspect.getmembers(mod_module):
-				print(member_name)
-				if inspect.isclass(member) and member.__bases__.__contains__(ModTemplate):
-					mods.append(member)
-					mod_names.append(member_name)
-					print('Module loaded')
+	for name, file in mod_data.items():
+		mod_module = importfile(get_file_path(file))
+		for member_name, member in inspect.getmembers(mod_module):
+			print(member_name)
+			if inspect.isclass(member) and member.__bases__.__contains__(ModTemplate):
+				mods.append(member)
+				mod_names.append(member_name)
+				print(f'Mod {member_name, name} loaded')
 	return Mods(settings, mods, mod_names) if mods else ModTemplate(settings)
