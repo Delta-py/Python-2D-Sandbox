@@ -1,17 +1,15 @@
 from settings import *
+from entity import Entity
 import keyboard_layout
 import copy
 
-class Player:
+class Player(Entity):
 	def __init__(self):
-		self.display = pygame.display.get_surface()
+		super().__init__()
 		self.texture = CHARACTER_TEXTURES['idle_f']
 		self.keyboard = keyboard_layout.Keyboard()
 
-		self.position = pygame.math.Vector2(0, 0)
-		self.direction = pygame.math.Vector2(0, 1)
 		self.accelerate = False
-		self.velocity = 0
 
 		self.action = 'idle'
 		self.animation_direction = (0, 1)
@@ -48,6 +46,7 @@ class Player:
 		self.position += temp
 
 	def update(self, delta_time, total_time):
+		super().update(delta_time, total_time)
 		self.update_velocity(delta_time)
 
 		self.animation_direction = temp if (temp := (0.0 if abs(self.direction.y) > abs(self.direction.x) * 1.05 else sign(self.direction.x), \
@@ -57,5 +56,6 @@ class Player:
 		print(f'Action: {self.action} Velocity, Direction: {self.velocity, self.direction}')
 
 	def draw(self):
+		super().draw()
 		self.display.blit(self.texture[self.animation_time % len(self.texture)], self.position + WINDOW_SIZE / 2)
 		pygame.draw.line(self.display, (255, 0, 0), self.position + WINDOW_SIZE / 2, self.position + self.velocity * self.direction + WINDOW_SIZE / 2)
