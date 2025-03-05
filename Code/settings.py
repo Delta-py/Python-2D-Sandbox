@@ -2,6 +2,12 @@ import pygame
 import os
 import math
 import time
+import logging
+import datetime
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(filename=f'Logs/{datetime.datetime.now().strftime('%Y%m%d%H%M%S%f')}.log', \
+					format='%(asctime)s.%(msecs)06d %(levelname)s: %(message)s', datefmt='%m/%d/%Y %H:%M:%S', encoding='utf-8', level=logging.DEBUG)
 
 TILE_SIZE = 16
 PLAYER_SIZE = pygame.math.Vector2(16, 24)

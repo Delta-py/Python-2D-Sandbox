@@ -53,7 +53,7 @@ class Player(Entity):
 											   		 0.0 if abs(self.direction.y) < abs(self.direction.x) * 1.05 else sign(self.direction.y))) != (0, 0) else self.animation_direction
 		self.texture = CHARACTER_TEXTURES[f"{self.action}_{DIRECTIONS[self.animation_direction]}"]
 		self.animation_time = int(total_time * 4)
-		print(f'Action: {self.action} Velocity, Direction: {self.velocity, self.direction}')
+		logging.info(f'Action: {self.action} Velocity, Direction: {self.velocity, self.direction}')
 
 	def draw(self):
 		super().draw()

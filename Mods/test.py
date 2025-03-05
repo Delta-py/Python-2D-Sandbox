@@ -8,4 +8,4 @@ class Test(ModTemplate):
 
 	def draw(self):
 		pygame.draw.line(self.display, (0, 0, 0), self.settings.WINDOW_SIZE / 4, self.settings.WINDOW_SIZE / 4 * 3)
-		print('drawing test')
+		self.settings.logging.info('drawing test')

@@ -29,7 +29,7 @@ def importfile(path):
 	try:
 		return importlib._bootstrap._load(spec)
 	except Exception as err:
-		print(f"Error importing {filename}: {err}")
+		logging.error(f"Error importing {filename}: {err}")
 
 
 class Mods(ModTemplate):
@@ -60,15 +60,15 @@ class Mods(ModTemplate):
 		super().draw()
 		for mod in self.mods.keys():
 			self.mods[mod].draw()
-		print('Mods drawing finished')
+		logging.info('Mods drawing finished')
 
 def load_mods() -> Mods:
 	mod_data: dict[str, str] = {}
 	with open(get_file_path('Settings', 'mods_config.json'), 'r') as f:
 		data = json.load(f)
-		print(data)
-		print(data['mods'])
-		print(type(data['mods']))
+		logging.info(data)
+		logging.info(data['mods'])
+		logging.info(type(data['mods']))
 		for mod in data['mods'].keys():
 			mod_data[mod] = data['mods'][mod]
 	mods = []
@@ -76,9 +76,9 @@ def load_mods() -> Mods:
 	for name, file in mod_data.items():
 		mod_module = importfile(get_file_path(file))
 		for member_name, member in inspect.getmembers(mod_module):
-			print(member_name)
+			logging.info(member_name)
 			if inspect.isclass(member) and member.__bases__.__contains__(ModTemplate):
 				mods.append(member)
 				mod_names.append(member_name)
-				print(f'Mod {member_name, name} loaded')
+				logging.info(f'Mod {member_name, name} loaded')
 	return Mods(settings, mods, mod_names) if mods else ModTemplate(settings)
