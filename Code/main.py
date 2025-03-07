@@ -1,7 +1,7 @@
 import pygame
 from settings import *
 from player import Player
-from mod_loader import load_mods
+from Mods.mod_loader import load_mods
 
 class Game:
 	def __init__(self):
@@ -21,6 +21,7 @@ class Game:
 	def update(self, delta_time, total_time):
 		self.player.update(delta_time, total_time)
 		self.mods.update(delta_time, total_time)
+		pygame.display.set_caption(f'{1 / delta_time}')
 
 	def draw(self, delta_time, total_time):
 		self.screen.fill((0, 0, 0))
@@ -48,5 +49,6 @@ class Game:
 		pygame.quit()
 
 if __name__ == "__main__":
+	print(f'Log at {get_file_path(log_file)}')
 	game = Game()
 	game.run()

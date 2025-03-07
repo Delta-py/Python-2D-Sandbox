@@ -1,5 +1,5 @@
 {
 	"mods": {
-		"Test": "Mods/Test.py"
+		"Test": "Mods\\Test.py"
 	}
 }

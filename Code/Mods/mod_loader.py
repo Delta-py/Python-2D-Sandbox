@@ -1,17 +1,13 @@
 from settings import *
 import settings
 import inspect
+from . import tools
 import os
-import sys
 import importlib.util
 import importlib._bootstrap
 import importlib._bootstrap_external
 import json
-
-BASE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(BASE_PATH)
-
-from Mods.API.template import ModTemplate
+from API.template import ModTemplate
 
 def importfile(path):
 	"""Import a Python source file or compiled file given its path."""
@@ -33,13 +29,13 @@ def importfile(path):
 
 
 class Mods(ModTemplate):
-	def __init__(self, settings, mods, mod_names):
-		super().__init__(settings)
+	def __init__(self, settings, tools, mods, mod_names):
+		super().__init__(settings, tools)
 		self.mods = {}
 		self.mod_names = mod_names
 		mods = mods
 		for index, mod in enumerate(mods):
-			self.mods[f'{index}_{mod_names[index]}'] = mod(settings)
+			self.mods[f'{index}_{mod_names[index]}'] = mod(settings, tools)
 
 	def on_init(self, app):
 		super().on_init(app)
@@ -81,4 +77,4 @@ def load_mods() -> Mods:
 				mods.append(member)
 				mod_names.append(member_name)
 				logging.info(f'Mod {member_name, name} loaded')
-	return Mods(settings, mods, mod_names) if mods else ModTemplate(settings)
+	return Mods(settings, tools, mods, mod_names) if mods else ModTemplate(settings)
