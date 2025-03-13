@@ -77,4 +77,4 @@ def load_mods() -> Mods:
 				mods.append(member)
 				mod_names.append(member_name)
 				logging.info(f'Mod {member_name, name} loaded')
-	return Mods(settings, tools, mods, mod_names) if mods else ModTemplate(settings)
+	return Mods(settings, tools, mods, mod_names) if mods else ModTemplate(settings, tools)

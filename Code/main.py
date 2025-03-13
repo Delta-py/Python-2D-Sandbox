@@ -1,9 +1,9 @@
-import pygame
+import pickle
 from settings import *
-from player import Player
-from Mods.mod_loader import load_mods
+from World_p.world import World
+from Mods_p.mod_loader import load_mods
 
-class Game:
+class Game(Pickleable_Object):
 	def __init__(self):
 		pygame.init()
 		pygame.display.set_mode(WINDOW_SIZE, pygame.RESIZABLE | pygame.SCALED)
@@ -13,24 +13,21 @@ class Game:
 		self.clock.tick()
 		time.sleep(0.1)
 
-		self.player = Player()
+		self.world = World()
 		self.mods = load_mods()
 
 		self.mods.on_init(self)
 
 	def update(self, delta_time, total_time):
-		self.player.update(delta_time, total_time)
+		self.world.update(delta_time, total_time)
 		self.mods.update(delta_time, total_time)
 		pygame.display.set_caption(f'{1 / delta_time}')
 
-	def draw(self, delta_time, total_time):
+	def draw(self):
 		self.screen.fill((0, 0, 0))
-		for x in range(0, int(WINDOW_SIZE.x), TILE_TEXTURES['grass'][0].get_width()):
-				for y in range(0, int(WINDOW_SIZE.y), TILE_TEXTURES['grass'][0].get_height()):
-					self.screen.blit(TILE_TEXTURES['grass'][int(total_time * 2) % len(TILE_TEXTURES['grass'])], (x, y))
 		pygame.draw.line(self.screen, (0, 0, 0), (0, WINDOW_SIZE.y / 2), (WINDOW_SIZE.x, WINDOW_SIZE.y / 2))
 		pygame.draw.line(self.screen, (0, 0, 0), (WINDOW_SIZE.x / 2, 0), (WINDOW_SIZE.x / 2, WINDOW_SIZE.y))
-		self.player.draw()
+		self.world.draw()
 		self.mods.draw()
 		pygame.display.update()
 
@@ -43,9 +40,18 @@ class Game:
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
 					running = False
+				if event.type == pygame.KEYDOWN:
+					if event.key == pygame.K_s:
+						with open(get_file_path('Worlds', 'world.pkl'), 'wb') as file:
+							logger.info("Saving save")
+							pickle.dump(self.world, file, pickle.HIGHEST_PROTOCOL)
+					if event.key == pygame.K_l:
+						with open(get_file_path('Worlds', 'world.pkl'), 'rb') as file:
+							logger.info("Loading save")
+							self.world = pickle.load(file)
 				self.mods.handle_event(event)
 			self.update(delta_time, total_time)
-			self.draw(delta_time, total_time)
+			self.draw()
 		pygame.quit()
 
 if __name__ == "__main__":

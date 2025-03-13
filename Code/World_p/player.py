@@ -57,5 +57,5 @@ class Player(Entity):
 
 	def draw(self):
 		super().draw()
-		self.display.blit(self.texture[self.animation_time % len(self.texture)], self.position + WINDOW_SIZE / 2)
-		pygame.draw.line(self.display, (255, 0, 0), self.position + WINDOW_SIZE / 2, self.position + self.velocity * self.direction + WINDOW_SIZE / 2)
+		self.screen.blit(self.texture[self.animation_time % len(self.texture)], self.position + WINDOW_SIZE / 2)
+		pygame.draw.line(self.screen, (255, 0, 0), self.position + WINDOW_SIZE / 2, self.position + self.velocity * self.direction + WINDOW_SIZE / 2)
