@@ -1,4 +1,4 @@
-import pickle
+import dill
 from settings import *
 from World_p.world import World
 from Mods_p.mod_loader import load_mods
@@ -42,13 +42,13 @@ class Game(Pickleable_Object):
 					running = False
 				if event.type == pygame.KEYDOWN:
 					if event.key == pygame.K_s:
-						with open(get_file_path('Worlds', 'world.pkl'), 'wb') as file:
+						with open(get_file_path('Worlds', 'world.wld'), 'wb') as file:
 							logger.info("Saving save")
-							pickle.dump(self.world, file, pickle.HIGHEST_PROTOCOL)
+							dill.dump(self.world, file)
 					if event.key == pygame.K_l:
-						with open(get_file_path('Worlds', 'world.pkl'), 'rb') as file:
+						with open(get_file_path('Worlds', 'world.wld'), 'rb') as file:
 							logger.info("Loading save")
-							self.world = pickle.load(file)
+							self.world = dill.load(file)
 				self.mods.handle_event(event)
 			self.update(delta_time, total_time)
 			self.draw()

@@ -6,6 +6,7 @@ import copy
 class Player(Entity):
 	def __init__(self):
 		super().__init__()
+		self.VERSION = VERSION
 		self.texture = CHARACTER_TEXTURES['idle_f']
 		self.keyboard = keyboard_layout.Keyboard()
 

@@ -20,7 +20,7 @@ WINDOW_SIZE = pygame.math.Vector2(16, 9) * 16
 get_file_path = lambda *folders: os.path.join('C:\\', *((__file__.split(':')[1]).split('\\')[:-2]), *folders)
 
 def load_texture(filename, type):
-	texture = pickleable_surface.pickleable_surface.PickleableSurface(pygame.image.load(get_file_path('Assets', 'Images', type, f'{filename}.png')))#.convert_alpha())
+	texture = pickleable_surface.pickleable_surface.PickleableSurface(logger, pygame.image.load(get_file_path('Assets', 'Images', type, f'{filename}.png')))#.convert_alpha())
 	return texture
 
 def load_tile_animation(tile):
@@ -34,7 +34,7 @@ def load_character_animation(state):
 	textures = load_texture(state, 'Characters')
 	animation_frames = []
 	for i in range(int((pygame.Vector2(textures.get_width(), textures.get_height()) / PLAYER_SIZE.x).x)):
-		animation_frames.append(pickleable_surface.pickleable_surface.PickleableSurface(textures.subsurface((i * PLAYER_SIZE.x, 0, PLAYER_SIZE.x, PLAYER_SIZE.y))))
+		animation_frames.append(pickleable_surface.pickleable_surface.PickleableSurface(logger, textures.subsurface((i * PLAYER_SIZE.x, 0, PLAYER_SIZE.x, PLAYER_SIZE.y))))
 	return animation_frames
 
 sign = lambda x: int(x/abs(x)) if x != 0 else 0
@@ -61,7 +61,12 @@ PLAYER_SPEED = 16
 CHUNK_SIZE = 16
 CHUNK_SIZE_SQUARED = CHUNK_SIZE * CHUNK_SIZE
 
+VERSION = 0.1
+
 class Pickleable_Object:
+	def __init__(self):
+		self.VERSION = VERSION
+
 	def __getstate__(self):
 		logger.info(f"Pickling Pickleable_Object {self.__class__.__name__}")
 		state = self.__dict__.copy()
@@ -72,5 +77,8 @@ class Pickleable_Object:
 
 	def __setstate__(self, state):
 		logger.info(f"Unpickling Pickleable_Object {self.__class__.__name__}")
+		logger.info(self.__class__.__dict__)
+		if state["VERSION"] != VERSION:
+			logger.warning(f"Older version of Pickleable_Object {self.__class__.__name__}, current VERSION: {VERSION}, VERSION of file: {state["VERSION"]}")
 		state["screen"] = pygame.display.get_surface()
 		self.__dict__.update(state)
