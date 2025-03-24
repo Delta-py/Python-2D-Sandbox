@@ -1,8 +1,10 @@
+from re import DEBUG
 from typing import Any
 import pickleable_surface.pickleable_surface
 import pygame
 import os
 import math
+import sys
 import time
 import logging
 import datetime
@@ -11,7 +13,10 @@ import pickleable_surface
 log_file = f'Logs\\{datetime.datetime.now().strftime('%Y%m%d%H%M%S%f')}.log'
 logger = logging.getLogger(__name__)
 logging.basicConfig(filename=log_file, \
-					format='%(asctime)s.%(msecs)09d %(levelname)s: %(message)s', datefmt='%m/%d/%Y %H:%M:%S', encoding='utf-8', level=logging.DEBUG)
+					format='%(asctime)s.%(msecs)09d %(levelname)s: %(message)s', datefmt='%m/%d/%Y %H:%M:%S', encoding='utf-8', level=logging.INFO)
+terminal = logging.StreamHandler(sys.stdout)
+terminal.setLevel(logging.WARN)
+logger.addHandler(terminal)
 
 TILE_SIZE = 16
 PLAYER_SIZE = pygame.math.Vector2(16, 24)
@@ -66,6 +71,7 @@ VERSION = 0.1
 class Pickleable_Object:
 	def __init__(self):
 		self.VERSION = VERSION
+		self.logger_level = logging.DEBUG
 
 	def __getstate__(self):
 		logger.info(f"Pickling Pickleable_Object {self.__class__.__name__}")
@@ -76,9 +82,16 @@ class Pickleable_Object:
 		return state
 
 	def __setstate__(self, state):
-		logger.info(f"Unpickling Pickleable_Object {self.__class__.__name__}")
-		logger.info(self.__class__.__dict__)
+		logger.debug(f"Unpickling Pickleable_Object {self.__class__.__name__}")
+		logger.debug(self.__class__.__dict__)
 		if state["VERSION"] != VERSION:
-			logger.warning(f"Older version of Pickleable_Object {self.__class__.__name__}, current VERSION: {VERSION}, VERSION of file: {state["VERSION"]}")
+			try:
+				if state["logger_level"] > logging.DEBUG:
+					logger.warning(f"Older version of Pickleable_Object {self.__class__.__name__}, current VERSION: {VERSION}, VERSION of file: {state["VERSION"]}")
+				else:
+					logger.debug(f"Older version of Pickleable_Object {self.__class__.__name__}, current VERSION: {VERSION}, VERSION of file: {state["VERSION"]}")
+			except Exception as e:
+				logger.error(f'{e}')
+				logger.info(f"Older version of Pickleable_Object {self.__class__.__name__}, current VERSION: {VERSION}, VERSION of file: {state["VERSION"]}")
 		state["screen"] = pygame.display.get_surface()
 		self.__dict__.update(state)

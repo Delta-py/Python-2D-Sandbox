@@ -7,6 +7,8 @@ class World(Pickleable_Object):
 	def __init__(self):
 		super().__init__()
 		self.screen = pygame.display.get_surface()
+		self.logger_level = logging.INFO
+
 		self.player = World_p.player.Player()
 		self.tile_map = World_p.tile_map.Tile_Map()
 
