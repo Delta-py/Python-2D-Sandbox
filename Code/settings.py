@@ -15,7 +15,7 @@ logging.basicConfig(filename=log_file, \
 
 TILE_SIZE = 16
 PLAYER_SIZE = pygame.math.Vector2(16, 24)
-WINDOW_SIZE = pygame.math.Vector2(16, 9) * 16
+WINDOW_SIZE = pygame.math.Vector2(16, 9) * 16 * 1.5
 
 get_file_path = lambda *folders: os.path.join('C:\\', *((__file__.split(':')[1]).split('\\')[:-2]), *folders)
 

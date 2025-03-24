@@ -13,5 +13,5 @@ class ModTemplate:
 	def update(self, delta_time, total_time):
 		pass
 
-	def draw(self):
+	def draw(self, displacement):
 		pass

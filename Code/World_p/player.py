@@ -8,7 +8,8 @@ class Player(Entity):
 		super().__init__()
 		self.VERSION = VERSION
 		self.texture = CHARACTER_TEXTURES['idle_f']
-		self.keyboard = keyboard_layout.Keyboard()
+		self.keyboard: keyboard_layout.Keyboard
+		self.keyboard_loaded = False
 
 		self.accelerate = False
 
@@ -47,6 +48,9 @@ class Player(Entity):
 		self.position += temp
 
 	def update(self, delta_time, total_time):
+		if not self.keyboard_loaded:
+			self.keyboard = keyboard_layout.Keyboard()
+			self.keyboard_loaded = True
 		super().update(delta_time, total_time)
 		self.update_velocity(delta_time)
 
@@ -56,7 +60,7 @@ class Player(Entity):
 		self.animation_time = int(total_time * 4)
 		logging.info(f'Action: {self.action} Velocity, Direction: {self.velocity, self.direction}')
 
-	def draw(self):
-		super().draw()
-		self.screen.blit(self.texture[self.animation_time % len(self.texture)], self.position + WINDOW_SIZE / 2)
-		pygame.draw.line(self.screen, (255, 0, 0), self.position + WINDOW_SIZE / 2, self.position + self.velocity * self.direction + WINDOW_SIZE / 2)
+	def draw(self, displacement):
+		super().draw(displacement)
+		self.screen.blit(self.texture[self.animation_time % len(self.texture)], self.position + displacement)
+		pygame.draw.line(self.screen, (255, 0, 0), self.position + displacement, self.position + self.velocity * self.direction + displacement)

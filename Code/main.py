@@ -28,7 +28,7 @@ class Game(Pickleable_Object):
 		pygame.draw.line(self.screen, (0, 0, 0), (0, WINDOW_SIZE.y / 2), (WINDOW_SIZE.x, WINDOW_SIZE.y / 2))
 		pygame.draw.line(self.screen, (0, 0, 0), (WINDOW_SIZE.x / 2, 0), (WINDOW_SIZE.x / 2, WINDOW_SIZE.y))
 		self.world.draw()
-		self.mods.draw()
+		self.mods.draw(self.world.displacement)
 		pygame.display.update()
 
 	def run(self):
@@ -42,11 +42,11 @@ class Game(Pickleable_Object):
 					running = False
 				if event.type == pygame.KEYDOWN:
 					if event.key == pygame.K_s:
-						with open(get_file_path('Worlds', 'world.wld'), 'wb') as file:
+						with open(get_file_path('Worlds', 'world.plk'), 'wb') as file:
 							logger.info("Saving save")
 							dill.dump(self.world, file)
 					if event.key == pygame.K_l:
-						with open(get_file_path('Worlds', 'world.wld'), 'rb') as file:
+						with open(get_file_path('Worlds', 'world.plk'), 'rb') as file:
 							logger.info("Loading save")
 							self.world = dill.load(file)
 				self.mods.handle_event(event)
