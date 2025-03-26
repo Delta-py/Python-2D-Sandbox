@@ -61,7 +61,7 @@ DIRECTIONS: dict[tuple[float, float], str] = {
 	(1.0, 0.0): 'r'
 }
 
-PLAYER_SPEED = 16
+PLAYER_SPEED = 128
 
 CHUNK_SIZE = 16
 CHUNK_SIZE_SQUARED = CHUNK_SIZE * CHUNK_SIZE
@@ -82,8 +82,15 @@ class Pickleable_Object:
 		return state
 
 	def __setstate__(self, state):
-		logger.debug(f"Unpickling Pickleable_Object {self.__class__.__name__}")
-		logger.debug(self.__class__.__dict__)
+		try:
+			if state["logger_level"] > logging.DEBUG:
+				logger.info(f"Unpickling Pickleable_Object {self.__class__.__name__}")
+				logger.info(self.__class__.__dict__)
+			else:
+				logger.debug(f"Unpickling Pickleable_Object {self.__class__.__name__}")
+				logger.debug(self.__class__.__dict__)
+		except Exception as e:
+			logger.error(f'{e}')
 		if state["VERSION"] != VERSION:
 			try:
 				if state["logger_level"] > logging.DEBUG:

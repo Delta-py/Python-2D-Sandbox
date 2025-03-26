@@ -6,7 +6,7 @@ from Mods_p.mod_loader import load_mods
 class Game(Pickleable_Object):
 	def __init__(self):
 		pygame.init()
-		pygame.display.set_mode(WINDOW_SIZE, pygame.RESIZABLE | pygame.SCALED)
+		pygame.display.set_mode(WINDOW_SIZE * 2, pygame.RESIZABLE | pygame.SCALED)
 
 		self.screen = pygame.display.get_surface()
 		self.clock = pygame.time.Clock()
@@ -29,6 +29,8 @@ class Game(Pickleable_Object):
 		pygame.draw.line(self.screen, (0, 0, 0), (WINDOW_SIZE.x / 2, 0), (WINDOW_SIZE.x / 2, WINDOW_SIZE.y))
 		self.world.draw()
 		self.mods.draw(self.world.displacement)
+		pygame.draw.line(self.screen, (255, 0, 0), (WINDOW_SIZE.x, 0), WINDOW_SIZE)
+		pygame.draw.line(self.screen, (255, 0, 0), (0, WINDOW_SIZE.y), WINDOW_SIZE)
 		pygame.display.update()
 
 	def run(self):
@@ -43,11 +45,11 @@ class Game(Pickleable_Object):
 				if event.type == pygame.KEYDOWN:
 					if event.key == pygame.K_s:
 						with open(get_file_path('Worlds', 'world.plk'), 'wb') as file:
-							logger.info("Saving save")
+							logger.info("Pickling save")
 							dill.dump(self.world, file)
 					if event.key == pygame.K_l:
 						with open(get_file_path('Worlds', 'world.plk'), 'rb') as file:
-							logger.info("Loading save")
+							logger.info("Unpickling save")
 							self.world = dill.load(file)
 				self.mods.handle_event(event)
 			self.update(delta_time, total_time)
