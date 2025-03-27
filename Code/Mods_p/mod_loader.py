@@ -52,10 +52,10 @@ class Mods(ModTemplate):
 		for mod in self.mods.keys():
 			self.mods[mod].update(delta_time, total_time)
 
-	def draw(self):
-		super().draw()
+	def draw(self, displacement):
+		super().draw(displacement)
 		for mod in self.mods.keys():
-			self.mods[mod].draw()
+			self.mods[mod].draw(displacement)
 		logging.info('Mods drawing finished')
 
 def load_mods() -> Mods:
