@@ -1,4 +1,4 @@
-import dill
+import pickle
 from settings import *
 from World_p.world import World
 from Mods_p.mod_loader import load_mods
@@ -6,7 +6,7 @@ from Mods_p.mod_loader import load_mods
 class Game(Pickleable_Object):
 	def __init__(self):
 		pygame.init()
-		pygame.display.set_mode(WINDOW_SIZE * 2, pygame.RESIZABLE | pygame.SCALED)
+		pygame.display.set_mode(WINDOW_SIZE, pygame.RESIZABLE | pygame.SCALED)
 
 		self.screen = pygame.display.get_surface()
 		self.clock = pygame.time.Clock()
@@ -46,11 +46,11 @@ class Game(Pickleable_Object):
 					if event.key == pygame.K_s:
 						with open(get_file_path('Worlds', 'world.plk'), 'wb') as file:
 							logger.info("Pickling save")
-							dill.dump(self.world, file)
+							pickle.dump(self.world, file)
 					if event.key == pygame.K_l:
 						with open(get_file_path('Worlds', 'world.plk'), 'rb') as file:
 							logger.info("Unpickling save")
-							self.world = dill.load(file)
+							self.world = pickle.load(file)
 				self.mods.handle_event(event)
 			self.update(delta_time, total_time)
 			self.draw()

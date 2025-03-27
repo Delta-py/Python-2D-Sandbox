@@ -1,4 +1,3 @@
-from re import DEBUG
 from typing import Any
 import pickleable_surface.pickleable_surface
 import pygame
@@ -8,7 +7,6 @@ import sys
 import time
 import logging
 import datetime
-import pickleable_surface
 
 log_file = f'Logs\\{datetime.datetime.now().strftime('%Y%m%d%H%M%S%f')}.log'
 logger = logging.getLogger(__name__)
