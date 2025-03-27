@@ -57,6 +57,6 @@ class Game(Pickleable_Object):
 		pygame.quit()
 
 if __name__ == "__main__":
-	logger.critical(f'Logging in file {log_file}')
+	logger.critical(f'Logging in {log_file}')
 	game = Game()
 	game.run()
