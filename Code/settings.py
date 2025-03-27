@@ -8,7 +8,9 @@ import time
 import logging
 import datetime
 
-log_file = f'Logs\\{datetime.datetime.now().strftime('%Y%m%d%H%M%S%f')}.log'
+get_file_path = lambda *folders: os.path.join('C:\\', *((__file__.split(':')[1]).split('\\')[:-2]), *folders)
+
+log_file = get_file_path('Logs', f'{datetime.datetime.now().strftime('%Y%m%d%H%M%S%f')}.log')
 logger = logging.getLogger(__name__)
 logging.basicConfig(filename=log_file, \
 					format='%(asctime)s.%(msecs)09d %(levelname)s: %(message)s', datefmt='%m/%d/%Y %H:%M:%S', encoding='utf-8', level=logging.INFO)
@@ -19,8 +21,6 @@ logger.addHandler(terminal)
 TILE_SIZE = 16
 PLAYER_SIZE = pygame.math.Vector2(16, 24)
 WINDOW_SIZE = pygame.math.Vector2(16, 9) * 16 * 1.5
-
-get_file_path = lambda *folders: os.path.join('C:\\', *((__file__.split(':')[1]).split('\\')[:-2]), *folders)
 
 def load_texture(filename, type):
 	texture = pickleable_surface.pickleable_surface.PickleableSurface(logger, pygame.image.load(get_file_path('Assets', 'Images', type, f'{filename}.png')))#.convert_alpha())
