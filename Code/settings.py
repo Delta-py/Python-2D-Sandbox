@@ -29,8 +29,8 @@ def load_texture(filename, type):
 def load_tile_animation(tile):
 	texture = load_texture(tile, 'Tiles')
 	animation_frames = []
-	for i in range(int(texture.get_width() / texture.get_height())):
-		animation_frames.append(texture.subsurface((i * texture.get_height(), 0, texture.get_height(), texture.get_height())))
+	for i in range(int(texture.get_width() / TILE_SIZE)):
+		animation_frames.append(texture.subsurface((i * TILE_SIZE, 0, TILE_SIZE, texture.get_height())))
 	return animation_frames
 
 def load_character_animation(state):
@@ -49,7 +49,8 @@ CHARACTER_TEXTURES: dict[str, list[pickleable_surface.pickleable_surface.Picklea
 
 TILE_TEXTURES: dict[str, list[pickleable_surface.pickleable_surface.PickleableSurface]] = {
 	'grass': load_tile_animation('grass'),
-	'water': load_tile_animation('water')
+	'wood_boards': load_tile_animation('wood_boards'),
+	'air': [pickleable_surface.pickleable_surface.PickleableSurface(logger, (0, 0))]
 }
 
 DIRECTIONS: dict[tuple[float, float], str] = {
@@ -64,7 +65,7 @@ PLAYER_SPEED = 128
 CHUNK_SIZE = 16
 CHUNK_SIZE_SQUARED = CHUNK_SIZE * CHUNK_SIZE
 
-VERSION = 0.1
+VERSION = (0, 2, 1)
 
 class Pickleable_Object:
 	def __init__(self):

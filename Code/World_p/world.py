@@ -20,5 +20,7 @@ class World(Pickleable_Object):
 		self.displacement = pygame.Vector2(WINDOW_SIZE / 2, WINDOW_SIZE / 2) - self.player.position
 
 	def draw(self):
-		self.tile_map.draw(self.displacement)
+		self.tile_map.draw(0, self.player.position.y, False, self.displacement)
+		self.tile_map.draw(1, self.player.position.y, False, self.displacement)
 		self.player.draw(self.displacement)
+		self.tile_map.draw(1, self.player.position.y, True, self.displacement)

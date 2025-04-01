@@ -8,18 +8,21 @@ class Tile_Map(Pickleable_Object):
 		super().__init__()
 		self.screen = pygame.display.get_surface()
 		self.logger_level = logging.INFO
-		self.chunks: dict[tuple[int, int], World_p.chunk.Chunk] = {}
-		self.chunks[(0, 0)] = World_p.chunk.Chunk((0, 0))
-		self.chunks[(1, 0)] = World_p.chunk.Chunk((1, 0))
+		self.chunks: dict[tuple[int, int, int], World_p.chunk.Chunk] = {}
+		self.chunks[(0, 0, 0)] = World_p.chunk.Chunk((0, 0), 0)
+		self.chunks[(1, 0, 0)] = World_p.chunk.Chunk((1, 0), 0)
+		self.chunks[(0, 1, 0)] = World_p.chunk.Chunk((0, 1), 0)
+		self.chunks[(0, 1, 1)] = World_p.chunk.Chunk((0, 1), 1)
 
 	def update(self, delta_time, total_time):
 		for chunk in self.chunks.values():
 			chunk.update(delta_time, total_time)
 
-	def get_visible_chunks(self, displacement: pygame.Vector2):
+	def get_visible_chunks(self, displacement: pygame.Vector2, level: int):
 		return [chunk for chunk in self.chunks.values() if displacement.x - WINDOW_SIZE.x <= -chunk.id[0] * CHUNK_SIZE * TILE_SIZE <= displacement.x + CHUNK_SIZE * TILE_SIZE and \
-															displacement.y - WINDOW_SIZE.y <= -chunk.id[1] * CHUNK_SIZE * TILE_SIZE <= displacement.y + CHUNK_SIZE * TILE_SIZE]
+															displacement.y - WINDOW_SIZE.y <= -chunk.id[1] * CHUNK_SIZE * TILE_SIZE <= displacement.y + CHUNK_SIZE * TILE_SIZE + TILE_SIZE and \
+																chunk.level == level]
 
-	def draw(self, displacement: pygame.Vector2):
-		for chunk in self.get_visible_chunks(displacement):
-			chunk.draw(*displacement)
+	def draw(self, level, player_y_pos, render_in_front_of_player, displacement: pygame.Vector2):
+		for chunk in self.get_visible_chunks(displacement, level):
+			chunk.draw(level, render_in_front_of_player, player_y_pos, displacement.x, displacement.y)
