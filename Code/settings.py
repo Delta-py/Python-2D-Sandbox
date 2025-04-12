@@ -7,20 +7,21 @@ import sys
 import time
 import logging
 import datetime
+import numba
 
 get_file_path = lambda *folders: os.path.join('C:\\', *((__file__.split(':')[1]).split('\\')[:-2]), *folders)
 
 log_file = get_file_path('Logs', f'{datetime.datetime.now().strftime('%Y%m%d%H%M%S%f')}.log')
 logger = logging.getLogger(__name__)
 logging.basicConfig(filename=log_file, \
-					format='%(asctime)s.%(msecs)09d %(levelname)s: %(message)s', datefmt='%m/%d/%Y %H:%M:%S', encoding='utf-8', level=logging.INFO)
+					format='%(asctime)s.%(msecs)09d %(levelname)s: %(message)s', datefmt='%m/%d/%Y %H:%M:%S', encoding='utf-8', level=logging.DEBUG)
 terminal = logging.StreamHandler(sys.stdout)
 terminal.setLevel(logging.WARN)
 logger.addHandler(terminal)
 
 TILE_SIZE = 16
 PLAYER_SIZE = pygame.math.Vector2(16, 24)
-WINDOW_SIZE = pygame.math.Vector2(16, 9) * 16 * 1.5
+WINDOW_SIZE = pygame.math.Vector2(16, 9) * 16 * 1.5 * 2
 
 def load_texture(filename, type):
 	texture = pickleable_surface.pickleable_surface.PickleableSurface(logger, pygame.image.load(get_file_path('Assets', 'Images', type, f'{filename}.png')))#.convert_alpha())
@@ -40,7 +41,9 @@ def load_character_animation(state):
 		animation_frames.append(pickleable_surface.pickleable_surface.PickleableSurface(logger, textures.subsurface((i * PLAYER_SIZE.x, 0, PLAYER_SIZE.x, PLAYER_SIZE.y))))
 	return animation_frames
 
-sign = lambda x: int(x/abs(x)) if x != 0 else 0
+@numba.jit
+def sign(x):
+	return int(x/abs(x)) if x != 0 else 0
 
 CHARACTER_TEXTURES: dict[str, list[pickleable_surface.pickleable_surface.PickleableSurface]] = {
 	f'{state.name}'.split('.')[0]: load_character_animation(state.name.split('.')[0]) for state in \
@@ -101,3 +104,10 @@ class Pickleable_Object:
 				logger.info(f"Older version of Pickleable_Object {self.__class__.__name__}, current VERSION: {VERSION}, VERSION of file: {state["VERSION"]}")
 		state["screen"] = pygame.display.get_surface()
 		self.__dict__.update(state)
+
+class Render_Object:
+	def __init__(self, level, y_position):
+		self.level = level
+		self.y_position = y_position
+
+	def render(self): ...

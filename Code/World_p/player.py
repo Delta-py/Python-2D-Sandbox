@@ -1,3 +1,4 @@
+from turtle import position
 from settings import *
 from entity import Entity
 import keyboard_layout
@@ -61,7 +62,12 @@ class Player(Entity):
 		self.animation_time = int(total_time * 4)
 		logging.info(f'Action: {self.action} Velocity, Direction: {self.velocity, self.direction}')
 
-	def draw(self, displacement):
+	def render_function(self, displacement):
 		super().draw(displacement)
 		self.screen.blit(self.texture[self.animation_time % len(self.texture)], self.position + displacement)
 		pygame.draw.line(self.screen, (255, 0, 0), self.position + displacement, self.position + self.velocity * self.direction + displacement)
+
+	def draw(self, displacement):
+		render_object = Render_Object(1, self.position.y)
+		render_object.render = lambda: self.render_function(displacement)
+		return render_object

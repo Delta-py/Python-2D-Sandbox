@@ -1,4 +1,5 @@
 import pickle
+import cProfile
 from settings import *
 from World_p.world import World
 from Mods_p.mod_loader import load_mods
@@ -59,4 +60,5 @@ class Game(Pickleable_Object):
 if __name__ == "__main__":
 	logger.critical(f'Logging in {log_file}')
 	game = Game()
-	game.run()
+	with open(log_file, 'a') as sys.stdout:
+		cProfile.run('game.run()', sort='cumtime')
