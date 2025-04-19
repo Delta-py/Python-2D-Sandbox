@@ -30,10 +30,10 @@ class Chunk(Pickleable_Object):
 		render_objects = []
 		for pos, tile in enumerate(self.tiles):
 			if tile.texture != 'air':
-				render_object = Render_Object(self.level, TILE_SIZE * (CHUNK_SIZE * self.id[1] + pos // CHUNK_SIZE))
+				render_object = Render_Object(self.level, TILE_SIZE * (CHUNK_SIZE * self.id[1] + pos // CHUNK_SIZE - 1))
 				def render(pos = pos, tile = tile):
 					self.screen.blit(TILE_TEXTURES[tile.texture][int(self.total_time) % len(TILE_TEXTURES[tile.texture])], \
-						TILE_SIZE * pygame.Vector2(CHUNK_SIZE * self.id[0] + pos % CHUNK_SIZE, CHUNK_SIZE * self.id[1] + pos // CHUNK_SIZE) + displacement)
+						TILE_SIZE * pygame.Vector2(CHUNK_SIZE * self.id[0] + pos % CHUNK_SIZE, CHUNK_SIZE * self.id[1] + pos // CHUNK_SIZE - 1) + displacement)
 					#logger.debug(f'Rendering tile {tile.__class__} with pos:{pos} and level: {self.level} at {TILE_SIZE * pygame.Vector2(CHUNK_SIZE * self.id[0] + pos % CHUNK_SIZE, CHUNK_SIZE * self.id[1] + pos // CHUNK_SIZE)}')
 				render_object.render = render
 				render_objects.append(render_object)

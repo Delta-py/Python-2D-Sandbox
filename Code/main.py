@@ -3,6 +3,7 @@ import cProfile
 from settings import *
 from World_p.world import World
 from Mods_p.mod_loader import load_mods
+from Menus_p.tkinter_menu import Setting_Menu
 
 class Game(Pickleable_Object):
 	def __init__(self):
@@ -34,24 +35,34 @@ class Game(Pickleable_Object):
 		pygame.draw.line(self.screen, (255, 0, 0), (0, WINDOW_SIZE.y), WINDOW_SIZE)
 		pygame.display.update()
 
+	def pickle(self, save_name = 'world'):
+		with open(get_file_path('Worlds', f'{save_name}.plk'), 'wb') as file:
+			logger.info("Pickling save")
+			pickle.dump(self.world, file)
+
+	def unpickle(self, save_name = 'world'):
+		with open(get_file_path('Worlds', f'{save_name}.plk'), 'rb') as file:
+			logger.info("Unpickling save")
+			self.world = pickle.load(file)
+
+	def handle_event(self, event):
+		if event.type == pygame.QUIT:
+			self.running = False
+		elif event.type == pygame.KEYDOWN:
+			if event.key == pygame.K_ESCAPE:
+				settings = Setting_Menu(self.pickle, self.unpickle).run()
+				if settings != None:
+					self.world.player.keyboard.set_up_keys(settings[0])
+
+
 	def run(self):
-		running = True
-		while running:
+		self.running = True
+		while self.running:
 			self.clock.tick(pygame.display.get_current_refresh_rate())
 			delta_time = (self.clock.get_time() / 1000)
 			total_time = time.time()
 			for event in pygame.event.get():
-				if event.type == pygame.QUIT:
-					running = False
-				if event.type == pygame.KEYDOWN:
-					if event.key == pygame.K_s:
-						with open(get_file_path('Worlds', 'world.plk'), 'wb') as file:
-							logger.info("Pickling save")
-							pickle.dump(self.world, file)
-					if event.key == pygame.K_l:
-						with open(get_file_path('Worlds', 'world.plk'), 'rb') as file:
-							logger.info("Unpickling save")
-							self.world = pickle.load(file)
+				self.handle_event(event)
 				self.mods.handle_event(event)
 			self.update(delta_time, total_time)
 			self.draw()

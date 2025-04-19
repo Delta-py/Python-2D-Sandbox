@@ -10,7 +10,10 @@ class Key(enum.Enum):
 
 class Keyboard:
 	def __init__(self):
-		wasd = tkinter.simpledialog.askstring('Pygame window', 'Type wasd or your preferred controls.')
+		wasd = tkinter.simpledialog.askstring('Pygame window', 'Type wasd or your preferred controls.', initialvalue='wasd')
+		self.set_up_keys(wasd)
+
+	def set_up_keys(self, wasd):
 		self.w = pygame.key.key_code(wasd[int(Key.w.value)])
 		self.a = pygame.key.key_code(wasd[int(Key.a.value)])
 		self.s = pygame.key.key_code(wasd[int(Key.s.value)])
