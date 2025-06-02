@@ -49,23 +49,29 @@ class Player(Entity):
 		except ValueError: temp = pygame.math.Vector2(0, 0)
 		self.position += temp
 
-	def update(self, delta_time, total_time):
+	def update(self, delta_time, total_time, debug):
+		super().update(delta_time, total_time, debug)
 		if not self.keyboard_loaded:
 			self.keyboard = keyboard_layout.Keyboard()
 			self.keyboard_loaded = True
-		super().update(delta_time, total_time)
 		self.update_velocity(delta_time)
 
 		self.animation_direction = temp if (temp := (0.0 if abs(self.direction.y) > abs(self.direction.x) * 1.05 else sign(self.direction.x), \
 											   		 0.0 if abs(self.direction.y) < abs(self.direction.x) * 1.05 else sign(self.direction.y))) != (0, 0) else self.animation_direction
 		self.texture = CHARACTER_TEXTURES[f"{self.action}_{DIRECTIONS[self.animation_direction]}"]
 		self.animation_time = int(total_time * 4)
+
+		self.hitbox = self.texture[0].get_rect(topleft=self.position)
 		logging.info(f'Action: {self.action} Velocity, Direction: {self.velocity, self.direction}')
 
 	def render_function(self, displacement):
 		super().draw(displacement)
 		self.screen.blit(self.texture[self.animation_time % len(self.texture)], self.position + displacement)
-		pygame.draw.line(self.screen, (255, 0, 0), self.position + displacement, self.position + self.velocity * self.direction + displacement)
+		if self.debug:
+			pygame.draw.line(self.screen, (255, 0, 0), self.position + displacement, self.position + self.velocity * self.direction + displacement)
+			temp_surface = pygame.Surface(self.hitbox.size)
+			temp_surface.fill('red')
+			self.screen.blit(temp_surface, self.hitbox.topleft + displacement, special_flags=pygame.BLEND_RGBA_MAX)
 
 	def draw(self, displacement):
 		render_object = Render_Object(1, self.position.y)

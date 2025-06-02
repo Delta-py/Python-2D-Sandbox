@@ -20,9 +20,11 @@ class Game(Pickleable_Object):
 
 		self.mods.on_init(self)
 
+		self.debug = True
+
 	def update(self, delta_time, total_time):
-		self.world.update(delta_time, total_time)
-		self.mods.update(delta_time, total_time)
+		self.world.update(delta_time, total_time, self.debug)
+		self.mods.update(delta_time, total_time, self.debug)
 		pygame.display.set_caption(f'{1 / delta_time}')
 
 	def draw(self):
@@ -51,8 +53,10 @@ class Game(Pickleable_Object):
 		elif event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_ESCAPE:
 				settings = Setting_Menu(self.pickle, self.unpickle).run()
+				logger.info(f'Settings: {settings}')
 				if settings != None:
 					self.world.player.keyboard.set_up_keys(settings[0])
+					self.debug = settings[1]
 
 
 	def run(self):

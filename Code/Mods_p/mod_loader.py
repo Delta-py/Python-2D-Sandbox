@@ -47,10 +47,10 @@ class Mods(ModTemplate):
 		for mod in self.mods.keys():
 			self.mods[mod].handle_event(event)
 
-	def update(self, delta_time, total_time):
-		super().update(delta_time, total_time)
+	def update(self, delta_time, total_time, debug):
+		super().update(delta_time, total_time, debug)
 		for mod in self.mods.keys():
-			self.mods[mod].update(delta_time, total_time)
+			self.mods[mod].update(delta_time, total_time, debug)
 
 	def draw(self, displacement):
 		super().draw(displacement)

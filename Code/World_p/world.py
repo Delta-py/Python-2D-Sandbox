@@ -14,9 +14,9 @@ class World(Pickleable_Object):
 
 		self.displacement = pygame.Vector2(0, 0)
 
-	def update(self, delta_time, total_time):
-		self.tile_map.update(delta_time, total_time)
-		self.player.update(delta_time, total_time)
+	def update(self, delta_time, total_time, debug):
+		self.tile_map.update(delta_time, total_time, debug)
+		self.player.update(delta_time, total_time, debug)
 		self.displacement = pygame.Vector2(WINDOW_SIZE / 2, WINDOW_SIZE / 2) - self.player.position
 
 	def draw(self):

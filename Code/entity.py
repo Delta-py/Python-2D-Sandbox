@@ -7,10 +7,11 @@ class Entity(Pickleable_Object):
 		self.position = pygame.math.Vector2(0, 0)
 		self.direction = pygame.math.Vector2(0, 1)
 		self.velocity = 0
-		self.hitbox: pygame.rect
+		self.hitbox: pygame.Rect
+		self.debug: bool
 
-	def update(self, delta_time, total_time):
-		pass
+	def update(self, delta_time, total_time, debug):
+		self.debug = debug
 
 	def draw(self, displacement):
 		pass

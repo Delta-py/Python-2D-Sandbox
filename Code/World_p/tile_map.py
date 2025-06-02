@@ -14,9 +14,9 @@ class Tile_Map(Pickleable_Object):
 		self.chunks[(0, 1, 0)] = World_p.chunk.Chunk((0, 1), 0)
 		self.chunks[(0, 1, 1)] = World_p.chunk.Chunk((0, 1), 1)
 
-	def update(self, delta_time, total_time):
+	def update(self, delta_time, total_time, debug):
 		for chunk in self.chunks.values():
-			chunk.update(delta_time, total_time)
+			chunk.update(delta_time, total_time, debug)
 
 	def get_visible_chunks(self, displacement: pygame.Vector2):
 		return [chunk for chunk in self.chunks.values() if displacement.x - WINDOW_SIZE.x <= -chunk.id[0] * CHUNK_SIZE * TILE_SIZE <= displacement.x + CHUNK_SIZE * TILE_SIZE and \
